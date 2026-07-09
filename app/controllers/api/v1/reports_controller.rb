@@ -21,6 +21,11 @@ module Api
           return false
         end
 
+        unless company_ids.all? { |company_id| company_id.to_s.match?(/\A\d+\z/) }
+          render json: { error: "company_ids must be integers" }, status: :bad_request
+          return false
+        end
+
         unless company_ids.size.between?(1, 50)
           render json: { error: "company_ids must include between 1 and 50 IDs" }, status: :bad_request
           return false
