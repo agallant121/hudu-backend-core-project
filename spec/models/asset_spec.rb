@@ -52,5 +52,12 @@ RSpec.describe Asset, type: :model do
 
       expect(asset.company).to eq(company)
     end
+
+    it "has many maintenance records" do
+      asset = create(:asset)
+      maintenance_record = create(:maintenance_record, asset:)
+
+      expect(asset.maintenance_records).to contain_exactly(maintenance_record)
+    end
   end
 end

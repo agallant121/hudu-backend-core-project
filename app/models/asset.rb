@@ -8,6 +8,7 @@ class Asset < ApplicationRecord
   ].freeze
 
   belongs_to :company
+  has_many :maintenance_records, dependent: :destroy
 
   validates :name, presence: true
   validates :asset_type, presence: true, inclusion: { in: ASSET_TYPES }
