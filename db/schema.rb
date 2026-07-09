@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_09_144500) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_09_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -59,6 +59,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_144500) do
     t.index ["performed_at"], name: "index_maintenance_records_on_performed_at"
   end
 
+  create_table "notes", force: :cascade do |t|
+    t.text "content", null: false
+    t.bigint "asset_id", null: false
+    t.bigint "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asset_id", "created_at"], name: "index_notes_on_asset_id_and_created_at"
+    t.index ["asset_id"], name: "index_notes_on_asset_id"
+    t.index ["author_id"], name: "index_notes_on_author_id"
+  end
+
   create_table "software_licenses", force: :cascade do |t|
     t.string "software_name", null: false
     t.string "license_key"
@@ -82,5 +93,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_144500) do
   add_foreign_key "assets", "companies"
   add_foreign_key "contacts", "companies"
   add_foreign_key "maintenance_records", "assets"
+  add_foreign_key "notes", "assets"
+  add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "software_licenses", "assets"
 end

@@ -66,5 +66,12 @@ RSpec.describe Asset, type: :model do
 
       expect(asset.software_licenses).to contain_exactly(software_license)
     end
+
+    it "has many notes" do
+      asset = create(:asset)
+      note = create(:note, asset:)
+
+      expect(asset.notes).to contain_exactly(note)
+    end
   end
 end

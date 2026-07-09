@@ -24,4 +24,13 @@ RSpec.describe User, type: :model do
       expect(user.errors[:email]).to include("has already been taken")
     end
   end
+
+  describe "associations" do
+    it "has many notes as author" do
+      user = create(:user)
+      note = create(:note, author: user)
+
+      expect(user.notes).to contain_exactly(note)
+    end
+  end
 end
