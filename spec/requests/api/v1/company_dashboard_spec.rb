@@ -148,6 +148,7 @@ RSpec.describe "Company Dashboard", type: :request do
       get "/api/v1/companies/999999/dashboard"
 
       expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)).to eq({ "error" => "Company not found" })
     end
   end
 end
