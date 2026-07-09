@@ -102,5 +102,12 @@ RSpec.describe "Company Comparison", type: :request do
       expect(response).to have_http_status(:bad_request)
       expect(JSON.parse(response.body)).to eq({ "error" => "company_ids must include between 1 and 50 IDs" })
     end
+
+    it "returns 400 when company_ids include non-integer values" do
+      get "/api/v1/reports/company_comparison", params: { company_ids: [ "abc" ] }
+
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)).to eq({ "error" => "company_ids must be integers" })
+    end
   end
 end
