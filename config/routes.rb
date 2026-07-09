@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get "companies/:id/dashboard", to: "companies#dashboard"
+      get "reports/company_comparison", to: "reports#company_comparison"
     end
   end
 
