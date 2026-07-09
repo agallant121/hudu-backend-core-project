@@ -43,7 +43,7 @@ class CompanyDashboardQuery
       .includes(:asset)
       .where(assets: { company_id: company.id })
       .where(expiration_date: Date.current..60.days.from_now.to_date)
-      .order(:expiration_date)
+      .order(:expiration_date, :id)
       .limit(10)
       .to_a
   end
