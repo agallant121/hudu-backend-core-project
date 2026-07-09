@@ -36,6 +36,8 @@ class ExpiringLicensesQuery
     @by_software ||= matching_licenses.group(:software_name).count
   end
 
+  # Hudu clarified this should include already expired licenses,
+  # so we intentionally query everything on or before the cutoff.
   def matching_licenses
     @matching_licenses ||= SoftwareLicense.where("expiration_date <= ?", cutoff_date)
   end
