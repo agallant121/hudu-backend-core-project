@@ -38,7 +38,10 @@ class ExpiringLicensesSerializer
   end
 
   def company_contact(company)
-    company.primary_contact&.email
+    contact = company.contacts.find { |company_contact| company_contact.role == Contact::PRIMARY_ROLE }
+    contact ||= company.contacts.min_by(&:id)
+
+    contact&.email
   end
 
   def summary
