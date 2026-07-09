@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get "assets/:id", to: "assets#show"
       get "companies/:id/dashboard", to: "companies#dashboard"
       get "reports/company_comparison", to: "reports#company_comparison"
+      get "reports/expiring_licenses", to: "reports#expiring_licenses"
     end
   end
 
