@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_09_150000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_09_151500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_150000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["asset_type"], name: "index_assets_on_asset_type"
+    t.index ["company_id", "asset_type"], name: "index_assets_on_company_id_and_asset_type"
     t.index ["company_id"], name: "index_assets_on_company_id"
     t.index ["serial_number"], name: "index_assets_on_serial_number", unique: true, where: "(serial_number IS NOT NULL)"
   end

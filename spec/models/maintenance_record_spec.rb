@@ -30,6 +30,13 @@ RSpec.describe MaintenanceRecord, type: :model do
       expect(maintenance_record.errors[:cost]).to include("is not a number")
     end
 
+    it "requires a non-negative cost" do
+      maintenance_record = build(:maintenance_record, cost: -1)
+
+      expect(maintenance_record).not_to be_valid
+      expect(maintenance_record.errors[:cost]).to include("must be greater than or equal to 0")
+    end
+
     it "requires an asset" do
       maintenance_record = build(:maintenance_record, asset: nil)
 
