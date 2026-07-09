@@ -9,10 +9,26 @@ module Api
         render json: CompanyComparisonSerializer.new(data).as_json
       end
 
+      def expiring_licenses
+        return unless valid_days?
+
+        data = ExpiringLicensesQuery.call(days:)
+
+        render json: ExpiringLicensesSerializer.new(data).as_json
+      end
+
       private
 
       def company_ids
         @company_ids ||= Array(params[:company_ids]).reject(&:blank?)
+      end
+
+      def days
+        @days ||= days_param.to_i
+      end
+
+      def days_param
+        @days_param ||= params[:days].presence || "30"
       end
 
       def valid_company_ids?
@@ -28,6 +44,15 @@ module Api
 
         unless company_ids.size.between?(1, 50)
           render json: { error: "company_ids must include between 1 and 50 IDs" }, status: :bad_request
+          return false
+        end
+
+        true
+      end
+
+      def valid_days?
+        unless days_param.to_s.match?(/\A\d+\z/)
+          render json: { error: "days must be a non-negative integer" }, status: :bad_request
           return false
         end
 
