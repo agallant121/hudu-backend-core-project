@@ -19,6 +19,13 @@ RSpec.describe Company, type: :model do
   end
 
   describe "associations" do
+    it "has many assets" do
+      company = create(:company)
+      asset = create(:asset, company:)
+
+      expect(company.assets).to contain_exactly(asset)
+    end
+
     it "has many contacts" do
       company = create(:company)
       contact = create(:contact, company:)

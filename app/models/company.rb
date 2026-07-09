@@ -1,4 +1,5 @@
 class Company < ApplicationRecord
+  has_many :assets, dependent: :destroy
   has_many :contacts, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
