@@ -59,5 +59,12 @@ RSpec.describe Asset, type: :model do
 
       expect(asset.maintenance_records).to contain_exactly(maintenance_record)
     end
+
+    it "has many software licenses" do
+      asset = create(:asset)
+      software_license = create(:software_license, asset:)
+
+      expect(asset.software_licenses).to contain_exactly(software_license)
+    end
   end
 end

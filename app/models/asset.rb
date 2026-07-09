@@ -9,6 +9,7 @@ class Asset < ApplicationRecord
 
   belongs_to :company
   has_many :maintenance_records, dependent: :destroy
+  has_many :software_licenses, dependent: :destroy
 
   validates :name, presence: true
   validates :asset_type, presence: true, inclusion: { in: ASSET_TYPES }
