@@ -51,7 +51,7 @@ class CompanyDashboardQuery
   def recent_maintenance
     company_maintenance_records
       .includes(:asset)
-      .order(performed_at: :desc)
+      .order(performed_at: :desc, id: :desc)
       .limit(5)
       .to_a
   end
