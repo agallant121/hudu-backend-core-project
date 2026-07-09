@@ -23,7 +23,7 @@ class CompanyComparisonQuery
   end
 
   def company_metrics
-    companies.map do |company|
+    @company_metrics ||= companies.map do |company|
       {
         company:,
         total_assets: total_assets_by_company[company.id] || 0,
@@ -85,6 +85,8 @@ class CompanyComparisonQuery
   end
 
   def asset_age_years_sql
-    Arel.sql("(CURRENT_DATE - purchase_date)::decimal / 365.0")
+    as_of_date = ActiveRecord::Base.connection.quote(Date.current)
+
+    Arel.sql("(#{as_of_date}::date - purchase_date)::decimal / 365.0")
   end
 end
