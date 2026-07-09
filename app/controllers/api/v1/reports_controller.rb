@@ -90,7 +90,9 @@ module Api
       end
 
       def valid_date_param?(value)
-        value.to_s.match?(/\A\d{4}-\d{2}-\d{2}\z/) && parse_date(value)
+        return false unless value.to_s.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+
+        parse_date(value).present?
       end
 
       def parse_date(value)
