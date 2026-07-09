@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get "companies/:id/dashboard", to: "companies#dashboard"
       get "reports/company_comparison", to: "reports#company_comparison"
       get "reports/expiring_licenses", to: "reports#expiring_licenses"
+      get "reports/maintenance_costs", to: "reports#maintenance_costs"
     end
   end
 

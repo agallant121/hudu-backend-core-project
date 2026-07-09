@@ -17,6 +17,14 @@ module Api
         render json: ExpiringLicensesSerializer.new(data).as_json
       end
 
+      def maintenance_costs
+        return unless valid_maintenance_cost_dates?
+
+        data = MaintenanceCostsQuery.call(start_date:, end_date:)
+
+        render json: MaintenanceCostsSerializer.new(data).as_json
+      end
+
       private
 
       def company_ids
@@ -29,6 +37,14 @@ module Api
 
       def days_param
         @days_param ||= params[:days].presence || "30"
+      end
+
+      def start_date
+        @start_date ||= parse_date(params[:start_date])
+      end
+
+      def end_date
+        @end_date ||= parse_date(params[:end_date])
       end
 
       def valid_company_ids?
@@ -57,6 +73,32 @@ module Api
         end
 
         true
+      end
+
+      def valid_maintenance_cost_dates?
+        unless valid_date_param?(params[:start_date]) && valid_date_param?(params[:end_date])
+          render json: { error: "start_date and end_date must be valid dates in YYYY-MM-DD format" }, status: :bad_request
+          return false
+        end
+
+        if start_date > end_date
+          render json: { error: "start_date must be on or before end_date" }, status: :bad_request
+          return false
+        end
+
+        true
+      end
+
+      def valid_date_param?(value)
+        return false unless value.to_s.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+
+        parse_date(value).present?
+      end
+
+      def parse_date(value)
+        Date.iso8601(value)
+      rescue Date::Error
+        nil
       end
     end
   end
