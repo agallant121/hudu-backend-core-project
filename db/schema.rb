@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_09_143000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_09_144500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_143000) do
     t.index ["asset_id", "expiration_date"], name: "index_software_licenses_on_asset_id_and_expiration_date"
     t.index ["asset_id"], name: "index_software_licenses_on_asset_id"
     t.index ["expiration_date"], name: "index_software_licenses_on_expiration_date"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "assets", "companies"
