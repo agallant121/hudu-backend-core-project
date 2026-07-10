@@ -94,6 +94,31 @@ RSpec.describe "Maintenance Costs", type: :request do
       )
     end
 
+    it "returns zero summary and empty groups when there are no matching records" do
+      start_date = Date.new(2026, 7, 1)
+      end_date = Date.new(2026, 7, 31)
+
+      create(:maintenance_record, performed_at: start_date.beginning_of_day - 1.second)
+
+      get "/api/v1/reports/maintenance_costs",
+          params: {
+            start_date: start_date.iso8601,
+            end_date: end_date.iso8601
+          }
+      expect(response).to have_http_status(:ok)
+
+      json = JSON.parse(response.body)
+      expect(json["summary"]).to eq(
+        {
+          "total_cost" => 0.0,
+          "total_maintenance_count" => 0,
+          "avg_cost_per_maintenance" => 0.0
+        }
+      )
+      expect(json["by_company"]).to eq([])
+      expect(json["by_asset_type"]).to eq({})
+    end
+
     it "returns 400 when start_date is missing" do
       get "/api/v1/reports/maintenance_costs", params: { end_date: "2026-07-31" }
 
