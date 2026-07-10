@@ -28,7 +28,7 @@ class CompanyDashboardQuery
   end
 
   def assets_by_type
-    company.assets.group(:asset_type).count
+    company.assets.group(:asset_type).order(:asset_type).count
   end
 
   def total_maintenance_cost_ytd
