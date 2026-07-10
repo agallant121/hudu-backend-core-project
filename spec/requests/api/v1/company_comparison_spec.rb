@@ -90,8 +90,8 @@ RSpec.describe "Company Comparison", type: :request do
     end
 
     it "returns empty companies and zero totals when all company IDs are missing" do
-      missing_ids = [ Company.maximum(:id).to_i + 100, Company.maximum(:id).to_i + 101 ]
-
+      max_id = Company.maximum(:id).to_i
+      missing_ids = [max_id + 100, max_id + 101]
       get "/api/v1/reports/company_comparison", params: { company_ids: missing_ids }
 
       expect(response).to have_http_status(:ok)
