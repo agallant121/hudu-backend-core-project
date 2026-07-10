@@ -62,7 +62,7 @@ class CompanyComparisonQuery
     @maintenance_cost_ytd_by_company ||= MaintenanceRecord
       .joins(:asset)
       .where(assets: { company_id: company_ids })
-      .where(performed_at: Time.current.beginning_of_year..Time.current)
+      .where(performed_at: year_to_date_range)
       .group("assets.company_id")
       .sum(:cost)
   end
@@ -88,5 +88,9 @@ class CompanyComparisonQuery
     as_of_date = ActiveRecord::Base.connection.quote(Date.current)
 
     Arel.sql("(#{as_of_date}::date - purchase_date)::decimal / 365.0")
+  end
+
+  def year_to_date_range
+    Time.current.beginning_of_year..Time.current
   end
 end

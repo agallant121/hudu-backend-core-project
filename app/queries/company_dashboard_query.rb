@@ -33,7 +33,7 @@ class CompanyDashboardQuery
 
   def total_maintenance_cost_ytd
     company_maintenance_records
-      .where(performed_at: Time.current.beginning_of_year..Time.current)
+      .where(performed_at: year_to_date_range)
       .sum(:cost)
   end
 
@@ -60,5 +60,9 @@ class CompanyDashboardQuery
     MaintenanceRecord
       .joins(:asset)
       .where(assets: { company_id: company.id })
+  end
+
+  def year_to_date_range
+    Time.current.beginning_of_year..Time.current
   end
 end
