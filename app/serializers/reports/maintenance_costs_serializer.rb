@@ -1,4 +1,5 @@
-class MaintenanceCostsSerializer
+module Reports
+  class MaintenanceCostsSerializer
   def initialize(data)
     @data = data
   end
@@ -59,5 +60,6 @@ class MaintenanceCostsSerializer
 
   def average(value)
     value.to_f.round(2)
+  end
   end
 end

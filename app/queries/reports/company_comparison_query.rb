@@ -1,4 +1,5 @@
-class CompanyComparisonQuery
+module Reports
+  class CompanyComparisonQuery
   def self.call(company_ids:)
     new(company_ids:).call
   end
@@ -92,5 +93,6 @@ class CompanyComparisonQuery
 
   def year_to_date_range
     Time.current.beginning_of_year..Time.current
+  end
   end
 end

@@ -1,4 +1,5 @@
-class CompanyComparisonSerializer
+module Reports
+  class CompanyComparisonSerializer
   def initialize(data)
     @data = data
   end
@@ -44,5 +45,6 @@ class CompanyComparisonSerializer
 
   def last_maintenance_date(metrics)
     metrics[:last_maintenance_date]&.iso8601
+  end
   end
 end

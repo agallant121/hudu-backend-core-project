@@ -1,4 +1,5 @@
-class ExpiringLicensesSerializer
+module Reports
+  class ExpiringLicensesSerializer
   def initialize(data)
     @data = data
   end
@@ -16,24 +17,27 @@ class ExpiringLicensesSerializer
 
   def expiring_licenses
     data[:expiring_licenses].map do |license|
+      asset = license.asset
+      company = asset.company
+
       {
         id: license.id,
         software_name: license.software_name,
         license_key: license.license_key,
         expiration_date: license.expiration_date.iso8601,
         days_until_expiration: license.days_until_expiration,
-        asset: asset(license.asset),
-        company_contact: company_contact(license.asset.company)
+        asset: serialized_asset(asset, company),
+        company_contact: company_contact(company)
       }
     end
   end
 
-  def asset(asset)
+  def serialized_asset(asset, company)
     {
       id: asset.id,
       name: asset.name,
       asset_type: asset.asset_type,
-      company_name: asset.company.name
+      company_name: company.name
     }
   end
 
@@ -46,5 +50,6 @@ class ExpiringLicensesSerializer
       total_expiring: data[:summary][:total_expiring],
       by_software: data[:summary][:by_software]
     }
+  end
   end
 end

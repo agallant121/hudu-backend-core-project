@@ -4,25 +4,25 @@ module Api
       def company_comparison
         return unless valid_company_ids?
 
-        data = CompanyComparisonQuery.call(company_ids:)
+        data = Reports::CompanyComparisonQuery.call(company_ids:)
 
-        render json: CompanyComparisonSerializer.new(data).as_json
+        render json: Reports::CompanyComparisonSerializer.new(data).as_json
       end
 
       def expiring_licenses
         return unless valid_days?
 
-        data = ExpiringLicensesQuery.call(days:)
+        data = Reports::ExpiringLicensesQuery.call(days:)
 
-        render json: ExpiringLicensesSerializer.new(data).as_json
+        render json: Reports::ExpiringLicensesSerializer.new(data).as_json
       end
 
       def maintenance_costs
         return unless valid_maintenance_cost_dates?
 
-        data = MaintenanceCostsQuery.call(start_date:, end_date:)
+        data = Reports::MaintenanceCostsQuery.call(start_date:, end_date:)
 
-        render json: MaintenanceCostsSerializer.new(data).as_json
+        render json: Reports::MaintenanceCostsSerializer.new(data).as_json
       end
 
       private

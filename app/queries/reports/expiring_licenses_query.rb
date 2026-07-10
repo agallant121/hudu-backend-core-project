@@ -1,4 +1,5 @@
-class ExpiringLicensesQuery
+module Reports
+  class ExpiringLicensesQuery
   def self.call(days:)
     new(days:).call
   end
@@ -44,5 +45,6 @@ class ExpiringLicensesQuery
 
   def cutoff_date
     @cutoff_date ||= Date.current + days.days
+  end
   end
 end
