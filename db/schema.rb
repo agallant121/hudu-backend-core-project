@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_09_151500) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_09_202506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,7 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_151500) do
     t.datetime "updated_at", null: false
     t.index ["asset_id", "performed_at"], name: "index_maintenance_records_on_asset_id_and_performed_at"
     t.index ["asset_id"], name: "index_maintenance_records_on_asset_id"
-    t.index ["performed_at"], name: "index_maintenance_records_on_performed_at"
+    t.index ["performed_at", "id"], name: "index_maintenance_records_on_performed_at_and_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -80,7 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_09_151500) do
     t.datetime "updated_at", null: false
     t.index ["asset_id", "expiration_date"], name: "index_software_licenses_on_asset_id_and_expiration_date"
     t.index ["asset_id"], name: "index_software_licenses_on_asset_id"
-    t.index ["expiration_date"], name: "index_software_licenses_on_expiration_date"
+    t.index ["expiration_date", "id"], name: "index_software_licenses_on_expiration_date_and_id"
   end
 
   create_table "users", force: :cascade do |t|
