@@ -217,13 +217,15 @@ Bullet is available in development to help catch N+1 query regressions.
 ## Review Walkthrough
 
 ```text
+Request
+    ↓
 Controller
     ↓
-Parameter Validation
+Validation / Record Lookup
     ↓
-Query Object
+Query Object (retrieves & aggregates data)
     ↓
-Serializer
+Serializer (shapes the response)
     ↓
 JSON Response
 ```
