@@ -202,7 +202,7 @@ FactoryBot factories live in `spec/factories`.
 
 ## Performance Notes
 
-The report endpoints use query objects with grouped SQL aggregates instead of loading broad object graphs into Ruby:
+The report endpoints use query objects that push counting, grouping, sums, averages, and other aggregations into SQL instead of performing those calculations in Ruby:
 
 - maintenance costs are summed and counted in SQL
 - company comparison metrics are grouped by company
