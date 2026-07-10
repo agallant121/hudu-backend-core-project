@@ -89,6 +89,24 @@ RSpec.describe "Company Comparison", type: :request do
       )
     end
 
+    it "returns empty companies and zero totals when all company IDs are missing" do
+      missing_ids = [ Company.maximum(:id).to_i + 100, Company.maximum(:id).to_i + 101 ]
+
+      get "/api/v1/reports/company_comparison", params: { company_ids: missing_ids }
+
+      expect(response).to have_http_status(:ok)
+
+      json = JSON.parse(response.body)
+      expect(json["companies"]).to eq([])
+      expect(json["totals"]).to eq(
+        {
+          "total_assets" => 0,
+          "total_maintenance_cost" => 0.0,
+          "total_expiring_licenses" => 0
+        }
+      )
+    end
+
     it "returns 400 when company_ids are missing" do
       get "/api/v1/reports/company_comparison"
 
