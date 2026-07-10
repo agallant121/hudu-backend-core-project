@@ -4,25 +4,25 @@ module Api
       def company_comparison
         return unless valid_company_ids?
 
-        data = CompanyComparisonQuery.call(company_ids:)
+        data = Reports::CompanyComparisonQuery.call(company_ids:)
 
-        render json: CompanyComparisonSerializer.new(data).as_json
+        render json: Reports::CompanyComparisonSerializer.new(data).as_json
       end
 
       def expiring_licenses
         return unless valid_days?
 
-        data = ExpiringLicensesQuery.call(days:)
+        data = Reports::ExpiringLicensesQuery.call(days:)
 
-        render json: ExpiringLicensesSerializer.new(data).as_json
+        render json: Reports::ExpiringLicensesSerializer.new(data).as_json
       end
 
       def maintenance_costs
         return unless valid_maintenance_cost_dates?
 
-        data = MaintenanceCostsQuery.call(start_date:, end_date:)
+        data = Reports::MaintenanceCostsQuery.call(start_date:, end_date:)
 
-        render json: MaintenanceCostsSerializer.new(data).as_json
+        render json: Reports::MaintenanceCostsSerializer.new(data).as_json
       end
 
       private
@@ -48,45 +48,38 @@ module Api
       end
 
       def valid_company_ids?
-        if company_ids.empty?
-          render json: { error: "company_ids are required" }, status: :bad_request
-          return false
-        end
+        return render_bad_request("company_ids are required") if company_ids.empty?
 
         unless company_ids.all? { |company_id| company_id.to_s.match?(/\A\d+\z/) }
-          render json: { error: "company_ids must be integers" }, status: :bad_request
-          return false
+          return render_bad_request("company_ids must be integers")
         end
 
         unless company_ids.size.between?(1, 50)
-          render json: { error: "company_ids must include between 1 and 50 IDs" }, status: :bad_request
-          return false
+          return render_bad_request("company_ids must include between 1 and 50 IDs")
         end
 
         true
       end
 
       def valid_days?
-        unless days_param.to_s.match?(/\A\d+\z/)
-          render json: { error: "days must be a non-negative integer" }, status: :bad_request
-          return false
-        end
+        return render_bad_request("days must be a non-negative integer") unless days_param.to_s.match?(/\A\d+\z/)
 
         true
       end
 
       def valid_maintenance_cost_dates?
         unless valid_date_param?(params[:start_date]) && valid_date_param?(params[:end_date])
-          render json: { error: "start_date and end_date must be valid dates in YYYY-MM-DD format" }, status: :bad_request
-          return false
+          return render_bad_request("start_date and end_date must be valid dates in YYYY-MM-DD format")
         end
 
-        if start_date > end_date
-          render json: { error: "start_date must be on or before end_date" }, status: :bad_request
-          return false
-        end
+        return render_bad_request("start_date must be on or before end_date") if start_date > end_date
 
         true
+      end
+
+      def render_bad_request(message)
+        render json: { error: message }, status: :bad_request
+        false
       end
 
       def valid_date_param?(value)

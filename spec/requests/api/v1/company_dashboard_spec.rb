@@ -13,8 +13,8 @@ RSpec.describe "Company Dashboard", type: :request do
     it "returns dashboard data for an existing company" do
       company = create(:company, name: "Acme Corp")
       other_company = create(:company)
-      server = create(:asset, company:, name: "SERVER-01", asset_type: "server")
       workstation = create(:asset, company:, name: "WORKSTATION-01", asset_type: "workstation")
+      server = create(:asset, company:, name: "SERVER-01", asset_type: "server")
       create(:asset, company: other_company, asset_type: "printer")
       create(:contact, company:, name: "Fallback Contact", email: "fallback@acme.com", role: "technical")
       create(:contact, company:, name: "John Smith", email: "john@acme.com", role: Contact::PRIMARY_ROLE)
@@ -71,6 +71,7 @@ RSpec.describe "Company Dashboard", type: :request do
       expect(dashboard["name"]).to eq("Acme Corp")
       expect(dashboard["total_assets"]).to eq(2)
       expect(dashboard["assets_by_type"]).to eq({ "server" => 1, "workstation" => 1 })
+      expect(dashboard["assets_by_type"].keys).to eq([ "server", "workstation" ])
       expect(dashboard["total_maintenance_cost_ytd"]).to eq(375.75)
 
       expiring_licenses = dashboard.fetch("expiring_licenses")

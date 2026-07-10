@@ -51,6 +51,26 @@ RSpec.describe Company, type: :model do
       expect(company.primary_contact).to eq(first_contact)
     end
 
+    it "uses preloaded contacts when they are already loaded" do
+      company = create(:company)
+      create(:contact, company:, role: "technical")
+      primary_contact = create(:contact, company:, role: Contact::PRIMARY_ROLE)
+      loaded_company = Company.includes(:contacts).find(company.id)
+
+      expect(loaded_company.contacts).to be_loaded
+      expect(loaded_company.primary_contact).to eq(primary_contact)
+    end
+
+    it "falls back to the first preloaded contact when no primary contact exists" do
+      company = create(:company)
+      first_contact = create(:contact, company:, role: "technical")
+      create(:contact, company:, role: "billing")
+      loaded_company = Company.includes(:contacts).find(company.id)
+
+      expect(loaded_company.contacts).to be_loaded
+      expect(loaded_company.primary_contact).to eq(first_contact)
+    end
+
     it "returns nil when the company has no contacts" do
       company = create(:company)
 

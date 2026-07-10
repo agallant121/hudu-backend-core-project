@@ -16,6 +16,13 @@ RSpec.describe Contact, type: :model do
       expect(contact.errors[:email]).to include("can't be blank")
     end
 
+    it "requires a valid email format" do
+      contact = build(:contact, email: "not-an-email")
+
+      expect(contact).not_to be_valid
+      expect(contact.errors[:email]).to include("is invalid")
+    end
+
     it "requires a role" do
       contact = build(:contact, role: nil)
 

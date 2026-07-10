@@ -1,4 +1,5 @@
-class MaintenanceCostsQuery
+module Reports
+  class MaintenanceCostsQuery
   def self.call(start_date:, end_date:)
     new(start_date:, end_date:).call
   end
@@ -96,5 +97,6 @@ class MaintenanceCostsQuery
     return 0 if count.zero?
 
     total / count
+  end
   end
 end
