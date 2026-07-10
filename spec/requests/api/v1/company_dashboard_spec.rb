@@ -144,6 +144,18 @@ RSpec.describe "Company Dashboard", type: :request do
       )
     end
 
+    it "returns nil for primary contact when the company has no contacts" do
+      company = create(:company)
+
+      get "/api/v1/companies/#{company.id}/dashboard"
+
+      expect(response).to have_http_status(:ok)
+
+      dashboard = JSON.parse(response.body).fetch("company")
+      expect(dashboard["id"]).to eq(company.id)
+      expect(dashboard["primary_contact"]).to be_nil
+    end
+
     it "returns 404 when the company does not exist" do
       get "/api/v1/companies/999999/dashboard"
 
