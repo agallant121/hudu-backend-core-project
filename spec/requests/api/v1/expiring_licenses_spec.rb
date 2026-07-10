@@ -111,6 +111,24 @@ RSpec.describe "Expiring Licenses", type: :request do
       expect(expiring_licenses.map { |license| license["id"] }).not_to include(excluded_license.id)
     end
 
+    it "returns an empty list and zero summary when there are no matching licenses" do
+      # Outside the default 30-day window.
+      create(:software_license, software_name: "Future App", expiration_date: Date.current + 31.days)
+
+      get "/api/v1/reports/expiring_licenses"
+
+      expect(response).to have_http_status(:ok)
+
+      json = JSON.parse(response.body)
+      expect(json["expiring_licenses"]).to eq([])
+      expect(json["summary"]).to eq(
+        {
+          "total_expiring" => 0,
+          "by_software" => {}
+        }
+      )
+    end
+
     it "orders licenses by expiration date and id" do
       asset = create(:asset)
       later_license = create(:software_license, asset:, software_name: "Later App", expiration_date: Date.current + 2.days)
