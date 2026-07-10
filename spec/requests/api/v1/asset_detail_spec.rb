@@ -130,6 +130,18 @@ RSpec.describe "Asset Detail", type: :request do
       expect(asset_json["company_contact_email"]).to eq(first_contact.email)
     end
 
+    it "returns nil for company contact email when the company has no contacts" do
+      company = create(:company)
+      asset = create(:asset, company:)
+
+      get "/api/v1/assets/#{asset.id}"
+
+      expect(response).to have_http_status(:ok)
+
+      asset_json = JSON.parse(response.body).fetch("asset")
+      expect(asset_json["company_contact_email"]).to be_nil
+    end
+
     it "returns nil for last maintenance date when there are no maintenance records" do
       asset = create(:asset)
 
