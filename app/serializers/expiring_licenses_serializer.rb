@@ -38,16 +38,7 @@ class ExpiringLicensesSerializer
   end
 
   def company_contact(company)
-    return company_contact_cache[company.id] if company_contact_cache.key?(company.id)
-
-    contact = company.contacts.find { |contact| contact.role == Contact::PRIMARY_ROLE }
-    contact ||= company.contacts.min_by(&:id)
-
-    company_contact_cache[company.id] = contact&.email
-  end
-
-  def company_contact_cache
-    @company_contact_cache ||= {}
+    company.primary_contact&.email
   end
 
   def summary
